@@ -1,0 +1,79 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+}
+
+.header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.round {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #2C3E50;
+    margin-bottom: 10px;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.heart {
+    color: #FF6B6B;
+}
+
+.battlefield {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1000px;
+    flex-wrap: wrap;
+}
+
+.vs {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #4ECDC4;
+    text-shadow: 2px 2px 0px #fff;
+}
+
+.timerBar {
+    width: 100%;
+    max-width: 600px;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.timerFill {
+    height: 100%;
+    background: #FF6B6B;
+    transition: width 0.1s linear;
+}
+
+.message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    font-weight: 900;
+    color: #FF6B6B;
+    z-index: 100;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+}
