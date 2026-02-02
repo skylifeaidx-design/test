@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Restaurant } from "@/types";
 import styles from "./Card.module.css";
 import { motion } from "framer-motion";
@@ -11,6 +12,30 @@ interface CardProps {
 }
 
 export default function Card({ restaurant, onClick, disabled }: CardProps) {
+    const [imageSrc, setImageSrc] = useState(restaurant.imageUrl);
+
+    useEffect(() => {
+        let isMounted = true;
+        (async () => {
+            try {
+                // Fetch only if it's a placeholder
+                if (restaurant.imageUrl.includes('placehold.co')) {
+                    // Add '상암' prefix for better accuracy
+                    const res = await fetch(`/api/image?query=${encodeURIComponent('상암 ' + restaurant.name)}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.imageUrl && isMounted) {
+                            setImageSrc(data.imageUrl);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Image fetch failed", e);
+            }
+        })();
+        return () => { isMounted = false; };
+    }, [restaurant.name, restaurant.imageUrl]);
+
     return (
         <motion.div
             className={styles.card}
@@ -20,7 +45,12 @@ export default function Card({ restaurant, onClick, disabled }: CardProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8 }}
         >
-            <img src={restaurant.imageUrl} alt={restaurant.name} className={styles.imageRequest} />
+            <img
+                src={imageSrc}
+                alt={restaurant.name}
+                className={styles.imageRequest}
+                onError={() => setImageSrc(restaurant.imageUrl)}
+            />
             <div className={styles.content}>
                 <div>
                     <div className={styles.category}>{restaurant.category}</div>
