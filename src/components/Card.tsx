@@ -15,6 +15,9 @@ export default function Card({ restaurant, onClick, disabled }: CardProps) {
     const [imageSrc, setImageSrc] = useState(restaurant.imageUrl);
 
     useEffect(() => {
+        // Reset image immediately when restaurant changes
+        setImageSrc(restaurant.imageUrl);
+
         let isMounted = true;
         (async () => {
             try {

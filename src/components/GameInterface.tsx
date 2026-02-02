@@ -164,9 +164,9 @@ export default function GameInterface({ initialCandidates }: GameInterfaceProps)
             </header>
 
             <div className={styles.battlefield}>
-                <Card restaurant={currentPair[0]} onClick={() => nextMatch(currentPair[0])} />
+                <Card key={currentPair[0].id} restaurant={currentPair[0]} onClick={() => nextMatch(currentPair[0])} />
                 <div className={styles.vs}>VS</div>
-                <Card restaurant={currentPair[1]} onClick={() => nextMatch(currentPair[1])} />
+                <Card key={currentPair[1].id} restaurant={currentPair[1]} onClick={() => nextMatch(currentPair[1])} />
             </div>
 
             <AnimatePresence>
