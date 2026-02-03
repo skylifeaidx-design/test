@@ -13,6 +13,7 @@ interface CardProps {
 
 export default function Card({ restaurant, onClick, disabled }: CardProps) {
     const [imageSrc, setImageSrc] = useState(restaurant.imageUrl);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Reset image immediately when restaurant changes
@@ -23,6 +24,7 @@ export default function Card({ restaurant, onClick, disabled }: CardProps) {
             try {
                 // Fetch only if it's a placeholder
                 if (restaurant.imageUrl.includes('placehold.co')) {
+                    setIsLoading(true);
                     // Add '상암' prefix for better accuracy
                     const res = await fetch(`/api/image?query=${encodeURIComponent('상암 ' + restaurant.name)}`);
                     if (res.ok) {
@@ -31,9 +33,11 @@ export default function Card({ restaurant, onClick, disabled }: CardProps) {
                             setImageSrc(data.imageUrl);
                         }
                     }
+                    if (isMounted) setIsLoading(false);
                 }
             } catch (e) {
                 console.error("Image fetch failed", e);
+                if (isMounted) setIsLoading(false);
             }
         })();
         return () => { isMounted = false; };

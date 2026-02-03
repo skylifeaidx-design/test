@@ -16,19 +16,30 @@ export async function searchRestaurantImage(query: string): Promise<string | nul
     }
 
     try {
+        // Add timeout to prevent hanging requests
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
         const res = await fetch(`https://dapi.kakao.com/v2/search/image?query=${encodeURIComponent(query)}&sort=accuracy&page=1&size=1`, {
             headers: {
                 Authorization: `KakaoAK ${KAKAO_API_KEY}`,
             },
+            signal: controller.signal,
             next: { revalidate: 3600 } // Cache for 1 hour
         });
+
+        clearTimeout(timeoutId);
 
         if (!res.ok) throw new Error(`Kakao API Error: ${res.status}`);
 
         const data = await res.json() as ImageSearchResult;
         return data.documents[0]?.image_url || null;
     } catch (error) {
-        console.error("Failed to fetch image:", error);
+        if (error instanceof Error && error.name === 'AbortError') {
+            console.warn("Image search timed out for:", query);
+        } else {
+            console.error("Failed to fetch image:", error);
+        }
         return null;
     }
 }
